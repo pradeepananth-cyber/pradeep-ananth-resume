@@ -66,7 +66,6 @@ export default function PradeepResume() {
           <div className="lock">PRADEEP ANANTH<span className="dot"> ◆ </span>SAN FRANCISCO</div>
           <nav className="top-nav">
             <a href="#now"      onClick={navTo('now')}>Now</a>
-            <a href="#clients"  onClick={navTo('clients')}>Clients</a>
             <a href="#career"   onClick={navTo('career')}>Career</a>
             <a href="#for-frog" onClick={navTo('for-frog')}>For frog</a>
             <a href="#pov"      onClick={navTo('pov')}>POV</a>
