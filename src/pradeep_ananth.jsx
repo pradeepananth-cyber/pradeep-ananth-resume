@@ -85,8 +85,8 @@ export default function PradeepResume() {
                 Pradeep<br/>
                 <span className="it">Ananth.</span>
               </h1>
-              <p className="lede">
-                Two decades reinventing how the world&rsquo;s most ambitious companies meet their customers. Today, helping life&nbsp;sciences leaders translate <em>generative&nbsp;AI</em> into customer experiences that actually move outcomes.
+          <p className="lede">
+                Two decades across three worlds rarely combined &mdash; Big 4 consulting at Deloitte and IBM, agency leadership at Razorfish and Publicis, SaaS go-to-market at Celtra and Hearsay. The result is a <em>singular kind of executive</em> &mdash; one the C-suite (across every industry) has turned to when the stakes are highest.
               </p>
               <div className="hero-meta">
                 <span>Partner, IBM Consulting</span>
