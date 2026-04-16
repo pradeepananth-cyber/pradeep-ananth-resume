@@ -70,6 +70,52 @@ const MARQUEE = [
 ];
 
 // ============================================================
+// CANNED CHAPTER RESPONSES — used as graceful fallback when the
+// live API call can't reach the model (deployed page, no proxy,
+// local dev, or rate-limit). The chat tries the API first, and
+// falls back to these so the experience works everywhere.
+// ============================================================
+const CANNED = {
+  IBM: `Pradeep joined IBM Consulting in July 2023 as Partner, Customer Transformation, Life Sciences. He owns the relationships with Abbott, Illumina, Genentech, AbbVie, and Regeneron — a portfolio of marquee biotech and pharma names where the question isn't whether to do CX transformation, it's how to do it without breaking the regulatory model.
+
+The headline number: he's grown the Adobe practice at Abbott from $0 to $20M over the last five years. The headline craft: he's been one of the people figuring out how Generative AI actually lands inside a regulated industry — a Writer-AI partnership at Abbott for commercial use cases including auto-generated FAQs at scale; a Generative Engine Optimization play that's making Abbott's Adobe-built web properties citable by ChatGPT, Perplexity, and Gemini via llms.txt and JSON-LD; and a Regeneron initiative that turns vast volumes of qualitative user research into a real-time positioning instrument for marketing.
+
+For the frog committee: this is the chapter that proves he can run a Vice President-level book in a regulated industry, with a real GenAI through-line. He's the recipient of the IBM Industry Silver Badge for this work.`,
+
+  Hearsay: `Pradeep was hand-picked by the Hearsay board, alongside six other executives, to turn around a $55M ARR fintech CX SaaS business. He served as Chief Services Officer from May 2020 to June 2023 — three years of guiding the org through a maturation phase that the company genuinely needed.
+
+He ran the entire client services unit: Professional Services, Strategic Consulting, Customer Support, and Education. He launched value-added services across data & analytics, content strategy, and interactive design — building a profitable services org that touched the full customer lifecycle, not just the implementation moment.
+
+For the frog committee: Hearsay shows he can be trusted with the keys when the stakes are existential. It also shows he's spent meaningful time inside fintech — directly relevant to the Financial Services half of frog's industry mandate.`,
+
+  Celtra: `At Celtra, Pradeep was EVP and Chief Customer Officer from April 2019 to April 2020. He owned retention and growth of a roughly $45M ARR SaaS business — a platform for building and managing dynamic digital advertising at scale. Short tenure, sharp focus: he reset the customer success motion across enterprise accounts.
+
+For the frog committee: Celtra is the chapter that establishes the Chief Customer Officer instinct. The skill of taking an enterprise SaaS account base and finding the next dollar of growth inside it is the same skill that turns a frog client engagement into a multi-year relationship.`,
+
+  Deloitte: `Pradeep led the Digital Experience and SaaS Transformation practice for Deloitte Digital's West Region from January 2014 to March 2019 — five years that overlapped exactly with the moment "CX" became a board-level priority.
+
+He was strategic advisor to C-suite executives at HP, Intel, Salesforce, Cisco, Ally Bank, Cigna, and Experian — exactly the cross-industry C-suite portfolio frog wants its VPs running. He delivered end-to-end CX solutions on Adobe Experience Cloud, Salesforce Marketing Cloud, and Google Ad Cloud. He led delivery teams of up to 50 people across onshore and offshore. And he served as Operations Lead for the entire community of practice — meaning he was the person accountable for delivery quality across the practice, not just his own accounts.
+
+For the frog committee: this is the chapter that establishes the Big-5 consulting credentials. He has done this work, in this exact org structure, at scale.`,
+
+  Vivaki: `Pradeep was CTO of Vivaki — Publicis Groupe's hub for digital advertising capabilities — from October 2010 to January 2014. He built the unit from the inside, growing it to 200 people and over $100M in revenue. He stood up the AWS-based data platform that ingested signals from Google, Yahoo, DoubleClick, and Bing — early-cloud, early-bigdata work that became foundational for the entire Publicis network's digital practice.
+
+He shipped the strategic products that made Vivaki credible: Insights on Demand, Campaigns on Demand, Benchtools, Data Hub. He built a delivery org of 50+ architects, product owners, engineers, cloud infra, PMs, and QA.
+
+For the frog committee: Vivaki is the chapter that proves he can be the technologist in the room when frog is selling design-led work. He understands how the data, infrastructure, and product engineering have to align underneath the customer experience layer. Designers and strategists love working with leaders who get this.`,
+
+  Razorfish: `Pradeep spent five and a half years at Razorfish — June 2005 to September 2010 — the last four as Group Vice President, Technology for the West Region. He was part of the 8-person executive team running a $50M+ regional business inside a $300M+ global agency — the original digital experience agency, eventually acquired by Microsoft for $6 billion.
+
+He led $40M+ in business development wins. He grew the technology organization from 30 to 50. He stood up Centers of Excellence in JEE, .Net, Content Management, E-Commerce, and UX. He held some of the highest delivery margins in the company at 20-25%. The client portfolio: Visa, Genentech, Microsoft, Sony, Intel, NFL, Mattel, CBS, Yahoo.
+
+The detail that matters most for this audience: during this period, Pradeep partnered directly with frog Design on the Sun Microsystems engagement. He has worked alongside frog. He knows how the firm operates from inside the project room. For the frog committee: this isn't a candidate making his case from the outside — this is someone coming back to a partnership that worked twenty years ago.`
+};
+
+const cannedClient = (client) => `Live AI is offline at the moment, so I can't generate a custom take on ${client} on the fly. The short version: Pradeep's experience spans the three industries frog has asked him to cover — CPG, Financial Services, and Healthcare — across both Big Consulting (Deloitte, IBM) and design-led agency work (Razorfish, Vivaki). His current IBM Life Sciences book includes Abbott, Illumina, Genentech, AbbVie, and Regeneron, with a strong Generative AI through-line.
+
+For a real, specific conversation about ${client} — what their CX challenge looks like today, why his mix uniquely fits it, and what he'd propose in the first 90 days — please reach out at pradeepananth@gmail.com.`;
+
+// ============================================================
 // COMPONENT
 // ============================================================
 export default function PradeepResume() {
@@ -98,7 +144,9 @@ export default function PradeepResume() {
   }, []);
 
   // ------------- chat ask -----------------
-  async function ask(question, displayLabel) {
+  // `fallback` is the canned text to use if the live API call fails
+  // (deployed page without proxy, local dev, rate limit, network error, etc.)
+  async function ask(question, displayLabel, fallback) {
     if (!question || !question.trim() || busy) return;
     setBusy(true);
 
@@ -109,10 +157,16 @@ export default function PradeepResume() {
     const newMessages = [...messages, { role: 'user', content: question }];
     setMessages(newMessages);
 
+    let text = null;
+    let usedFallback = false;
+
     try {
       const response = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "anthropic-version": "2023-06-01"
+        },
         body: JSON.stringify({
           model: "claude-sonnet-4-20250514",
           max_tokens: 1024,
@@ -120,45 +174,50 @@ export default function PradeepResume() {
           messages: newMessages
         })
       });
-      if (!response.ok) throw new Error('API ' + response.status);
+      if (!response.ok) {
+        const body = await response.text().catch(() => '');
+        throw new Error(`API ${response.status}: ${body.slice(0, 300)}`);
+      }
       const data = await response.json();
-      const text = data.content
+      text = data.content
         .filter(b => b.type === 'text')
         .map(b => b.text)
         .join('\n');
-
-      // Replace thinking bubble with empty assistant bubble, then type out
-      setBubbles(prev => [...prev.slice(0, -1), { role: 'assistant', text: '' }]);
-
-      // Stream the text out for effect
-      let i = 0;
-      const tick = () => {
-        if (i < text.length) {
-          const slice = text.slice(0, i + 2);
-          setBubbles(prev => {
-            const next = [...prev];
-            next[next.length - 1] = { role: 'assistant', text: slice };
-            return next;
-          });
-          i += 2;
-          setTimeout(tick, 8);
-        } else {
-          setBubbles(prev => {
-            const next = [...prev];
-            next[next.length - 1] = { role: 'assistant', text };
-            return next;
-          });
-        }
-      };
-      tick();
-
-      setMessages([...newMessages, { role: 'assistant', content: text }]);
     } catch (err) {
-      setBubbles(prev => [
-        ...prev.slice(0, -1),
-        { role: 'assistant', text: "I can't reach the model from this hosted page (no API key in the browser). The live demo runs in the Claude artifact view. In the meantime, please reach out at pradeepananth@gmail.com." }
-      ]);
-    } finally {
+      console.warn('[Pradeep AI] live API unavailable, using canned response:', err);
+      text = fallback || "I can't reach the live model from here. Please reach out directly at pradeepananth@gmail.com.";
+      usedFallback = true;
+    }
+
+    // Replace thinking bubble with empty assistant bubble, then type out
+    setBubbles(prev => [...prev.slice(0, -1), { role: 'assistant', text: '', isFallback: usedFallback }]);
+
+    let i = 0;
+    const tick = () => {
+      if (i < text.length) {
+        const slice = text.slice(0, i + 2);
+        setBubbles(prev => {
+          const next = [...prev];
+          next[next.length - 1] = { role: 'assistant', text: slice, isFallback: usedFallback };
+          return next;
+        });
+        i += 2;
+        setTimeout(tick, 8);
+      } else {
+        setBubbles(prev => {
+          const next = [...prev];
+          next[next.length - 1] = { role: 'assistant', text, isFallback: usedFallback };
+          return next;
+        });
+        setBusy(false);
+      }
+    };
+    tick();
+
+    if (!usedFallback) {
+      setMessages([...newMessages, { role: 'assistant', content: text }]);
+    } else {
+      // Don't append fallback to API conversation history
       setBusy(false);
     }
   }
@@ -166,7 +225,8 @@ export default function PradeepResume() {
   function askChapter(c) {
     ask(
       `Summarize what Pradeep did at ${c.full}. Focus on what's most relevant to evaluating him for a market-facing Vice President role at frog (Capgemini Invent). Cover: scope of role, business outcomes, the kinds of clients/work, team or P&L size, and what it tells the committee about how he operates.`,
-      `Tell me about ${c.label}.`
+      `Tell me about ${c.label}.`,
+      CANNED[c.key]
     );
   }
 
@@ -176,7 +236,8 @@ export default function PradeepResume() {
     setClientInput('');
     ask(
       `The frog hiring committee is asking how Pradeep would bring value to ${c}. Based on his actual experience and POV, give a specific, grounded take: what's the likely CX challenge at ${c} today, why Pradeep's background uniquely suits it, and what he would propose in the first 90 days of an engagement. Be concrete, not generic.`,
-      `How would Pradeep bring value to ${c}?`
+      `How would Pradeep bring value to ${c}?`,
+      cannedClient(c)
     );
   }
 
@@ -411,7 +472,7 @@ export default function PradeepResume() {
               title="Chief Services Officer"
               co="Hearsay Corp. (Fintech SaaS) — San Francisco, CA"
               tags={['SaaS Turnaround', 'Financial Services', 'P&L Ownership', 'Org Building']}
-              desc={<>One of seven executives hand-picked by the board to turn around a <strong>$55M ARR</strong> last-mile digital CX business in fintech. GM of the entire client services unit &mdash; Professional Services, Strategic Consulting, Customer Support, Education. Launched value-added services across <strong>Data &amp; Analytics, Content Strategy, and Interactive Design</strong>, building a profitable services org that touched the full customer lifecycle.</>}
+              desc={<>One of seven executives hand-picked by the board to turn around a <strong>$55M ARR</strong> last-mile digital CX business in fintech. GM of the entire client services unit &mdash; Professional Services, Strategic Consulting, Customer Support, Education. Launched value-added services across <strong>Data &amp; Analytics, Content Strategy, and Interactive Design</strong>, building a profitable services org that touched the full customer lifecycle. Clients in Financial Services include <strong>Edward Jones, Wells Fargo, JP Morgan Chase, Fidelity, Farmers Insurance, Guardian, New York Life</strong></>}
             />
 
             <Role
@@ -419,7 +480,7 @@ export default function PradeepResume() {
               title={<>EVP &amp; <span className="it">Chief Customer Officer</span></>}
               co="Celtra Inc. — San Francisco, CA"
               tags={['Customer Success', 'SaaS', 'AdTech']}
-              desc={<>Owned retention and growth of a <strong>~$45M ARR</strong> SaaS platform for building and managing dynamic digital advertising at scale. Re-set customer success motion across enterprise accounts.</>}
+              desc={<>Owned retention and growth of a <strong>~$45M ARR</strong> SaaS platform for building and managing dynamic digital advertising at scale. Re-set customer success motion across enterprise accounts. Clients include <strong>Unilever, Procter & Gamble, Reckitt-Benckiser, Adidas, Spotify, Lego</strong></>}
             />
 
             <Role
@@ -435,7 +496,7 @@ export default function PradeepResume() {
               title="Chief Technology Officer"
               co="Vivaki (Publicis Groupe) — San Francisco, CA"
               tags={['CTO', 'AWS / Big Data', 'AdTech', 'Product Engineering']}
-              desc={<>Technology leader for Publicis&rsquo; bet on the digital advertising future. Vivaki grew to <strong>200 people and $100M+ in revenue</strong>. Built the data platform that ingested signals from Google, Yahoo, DoubleClick, Bing &mdash; the early-cloud foundation for the agency network&rsquo;s digital practice. Shipped strategic products: <strong>Insights on Demand, Campaigns on Demand, Benchtools, Data Hub.</strong></>}
+              desc={<>Technology leader for Publicis&rsquo; bet on the digital advertising future. Vivaki grew to <strong>200 people and $100M+ in revenue</strong>. Built the data platform that ingested signals from Google, Yahoo, DoubleClick, Bing &mdash; the early-cloud foundation for the agency network&rsquo;s digital practice on the AWS cloud leveraging their first-generation big data offerings like RedShift and DynamoDB. Shipped strategic products: <strong>Insights on Demand, Campaigns on Demand, Benchtools, Data Hub.</strong>Clients include <strong>Disney, Microsoft, WeightWatchers</strong></>}
             />
 
             <Role
