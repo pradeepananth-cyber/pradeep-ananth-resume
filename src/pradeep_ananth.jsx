@@ -1,68 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
-
-// ============================================================
-// SYSTEM PROMPT for the AI chat
-// ============================================================
-const SYSTEM_PROMPT = `You are an AI assistant representing Pradeep Ananth. Your audience is the frog (Capgemini Invent) hiring committee evaluating Pradeep for a Vice President role focused on selling design-led customer experience transformation to C-suite buyers in CPG, Financial Services, and Healthcare.
-
-Frame everything you say with that audience and that role in mind. The committee wants to know: can he sell the work? Can he hold a room of design-literate strategists AND a room of enterprise IT buyers? Will clients buy big from him? Does he get GenAI as more than a buzzword?
-
-VOICE: Smart, warm, confident, direct. Never slick. Never marketing fluff. Use specifics over abstractions. Speak in third person about Pradeep ("Pradeep would...", "He led...", "His instinct here..."). 2-4 short paragraphs maximum. Use line breaks between paragraphs. No markdown bullets, no headers — clean prose only.
-
-ABOUT PRADEEP:
-
-Currently Partner, Customer Transformation, Life Sciences at IBM Consulting (since July 2023). Key clients: Abbott, Illumina, Genentech, AbbVie, Regeneron. He owns major Customer Experience Transformation engagements with a strong Generative AI through-line.
-
-Headline IBM achievement: He grew the Adobe practice at Abbott from $0 to $20M over 5 years.
-
-Specific GenAI projects he's running right now:
-- ABBOTT: Partnered with Writer AI to deliver GenAI on commercial use cases — including auto-generated FAQs for support teams. Also extending Abbott's Adobe platform for Generative Engine Optimization (GEO) — adding llms.txt files, JSON-LD structured data, and other facilities so Abbott's web properties are discoverable and citable by LLM-based search and answer engines.
-- REGENERON: Building a GenAI solution that analyzes huge volumes of qualitative user research to surface emotive territories that marketing can tap into. Essentially turning a year of ethnographic research into a real-time positioning tool.
-
-CAREER ARC:
-- Razorfish (2005-2010) — Group VP Technology, West Region. Part of 8-person exec team running a $50M+ business inside a $300M+ agency that was acquired by Microsoft for $6B. Clients: Visa, Genentech, Microsoft, Sony, Intel, NFL, Mattel, CBS, Yahoo. Notably, he partnered with frog Design on the Sun Microsystems engagement during this era — direct firsthand experience with frog's craft.
-- Vivaki / Publicis Groupe (2010-2014) — CTO of a 200-person, $100M+ digital advertising unit. Built the AWS-based data platform that ingested signals from Google, Yahoo, DoubleClick, Bing.
-- Deloitte Digital (2014-2019) — Digital Experience & SaaS Practice Lead, West Region. Strategic advisor to C-suite at HP, Intel, Salesforce, Cisco, Ally Bank, Cigna, Experian. Adobe / Salesforce / Google ecosystems.
-- Celtra (2019-2020) — EVP / Chief Customer Officer, ~$45M ARR SaaS.
-- Hearsay (2020-June 2023) — Chief Services Officer. Hand-picked by the board, one of seven executives leading a turnaround of a $55M ARR fintech CX SaaS.
-- IBM Consulting (July 2023-present) — Partner, Customer Transformation, Life Sciences (current).
-
-EDUCATION & RECOGNITION:
-- Carnegie Mellon, MS Information Systems Management. Barker-Musser Fellow, 1 of 5 worldwide.
-- PSG College of Technology, BE Electronics & Communications. Valedictorian.
-- Industry Silver Badge, IBM.
-- Active advisor to Silicon Valley agentic-AI startups Squarediff and Bodhium Labs.
-
-WHAT HE BRINGS TO A DESIGN-LED CONSULTING ENVIRONMENT (very relevant for frog):
-- He came up on the agency side (Razorfish was the original digital experience agency). He speaks creative.
-- He can translate creative ambition into something enterprise IT will actually buy. That bridge is rare.
-- He has personally sold and delivered in all three of frog's stated industry priorities: CPG (Unilever, P&G, Adidas, Taco Bell), FS (Visa, Ally Bank, Cigna), Healthcare (Genentech, Abbott, Illumina, AbbVie, Regeneron).
-- He has lived inside Big Consulting (Deloitte), SaaS (Celtra, Hearsay), the holding-company agency model (Publicis/Vivaki, Razorfish), and enterprise consulting (IBM).
-
-POINT OF VIEW:
-- Generative AI is the new operating system for the customer relationship, not a feature bolted onto CX.
-- Life sciences is the most data-rich and most CX-conservative industry; that regulatory rigor will become an advantage once GenAI is deployed responsibly.
-- Modern CX is a context engine, not a content factory.
-- Most enterprises don't have a tech problem; they have a translation problem between boardroom ambition, brand voice, regulated reality, and engineering throughput.
-
-STYLE RULES:
-- If asked something specific you don't actually know, say so honestly and pivot to adjacent ground.
-- Don't oversell. Be measured.
-- For "summarize a chapter" requests, focus on what's relevant for a market-facing VP role at frog: business outcomes, client relationships, sold and delivered work, team built, ability to hold rooms.
-- For "apply to a client X" requests, give specific tactical insight: what their CX challenge likely looks like today, why Pradeep's mix of experience suits it, what he would propose in the first 90 days. Be concrete.`;
+import React, { useState, useEffect } from 'react';
 
 // ============================================================
 // DATA
 // ============================================================
-const CHAPTERS = [
-  { key: 'IBM',       label: 'IBM',       full: 'IBM Consulting (Partner, Customer Transformation, Life Sciences — 2023 to present)' },
-  { key: 'Hearsay',   label: 'Hearsay',   full: 'Hearsay (Chief Services Officer — 2020-2023)' },
-  { key: 'Celtra',    label: 'Celtra',    full: 'Celtra (EVP / Chief Customer Officer — 2019-2020)' },
-  { key: 'Deloitte',  label: 'Deloitte',  full: 'Deloitte Digital (Digital Experience Practice Lead — 2014-2019)' },
-  { key: 'Vivaki',    label: 'Vivaki',    full: 'Vivaki / Publicis (CTO — 2010-2014)' },
-  { key: 'Razorfish', label: 'Razorfish', full: 'Razorfish (Group VP, Technology, West — 2005-2010)' }
-];
-
 const MARQUEE = [
   'Abbott','Illumina','Genentech','AbbVie','Regeneron','Microsoft','Intel','HP','Adobe',
   'Salesforce','Cisco','Sony','Unilever','P&G','Adidas','Visa','Cigna','Ally Bank','Experian',
@@ -70,68 +10,10 @@ const MARQUEE = [
 ];
 
 // ============================================================
-// CANNED CHAPTER RESPONSES — used as graceful fallback when the
-// live API call can't reach the model (deployed page, no proxy,
-// local dev, or rate-limit). The chat tries the API first, and
-// falls back to these so the experience works everywhere.
-// ============================================================
-const CANNED = {
-  IBM: `Pradeep joined IBM Consulting in July 2023 as Partner, Customer Transformation, Life Sciences. He owns the relationships with Abbott, Illumina, Genentech, AbbVie, and Regeneron — a portfolio of marquee biotech and pharma names where the question isn't whether to do CX transformation, it's how to do it without breaking the regulatory model.
-
-The headline number: he's grown the Adobe practice at Abbott from $0 to $20M over the last five years. The headline craft: he's been one of the people figuring out how Generative AI actually lands inside a regulated industry — a Writer-AI partnership at Abbott for commercial use cases including auto-generated FAQs at scale; a Generative Engine Optimization play that's making Abbott's Adobe-built web properties citable by ChatGPT, Perplexity, and Gemini via llms.txt and JSON-LD; and a Regeneron initiative that turns vast volumes of qualitative user research into a real-time positioning instrument for marketing.
-
-For the frog committee: this is the chapter that proves he can run a Vice President-level book in a regulated industry, with a real GenAI through-line. He's the recipient of the IBM Industry Silver Badge for this work.`,
-
-  Hearsay: `Pradeep was hand-picked by the Hearsay board, alongside six other executives, to turn around a $55M ARR fintech CX SaaS business. He served as Chief Services Officer from May 2020 to June 2023 — three years of guiding the org through a maturation phase that the company genuinely needed.
-
-He ran the entire client services unit: Professional Services, Strategic Consulting, Customer Support, and Education. He launched value-added services across data & analytics, content strategy, and interactive design — building a profitable services org that touched the full customer lifecycle, not just the implementation moment.
-
-For the frog committee: Hearsay shows he can be trusted with the keys when the stakes are existential. It also shows he's spent meaningful time inside fintech — directly relevant to the Financial Services half of frog's industry mandate.`,
-
-  Celtra: `At Celtra, Pradeep was EVP and Chief Customer Officer from April 2019 to April 2020. He owned retention and growth of a roughly $45M ARR SaaS business — a platform for building and managing dynamic digital advertising at scale. Short tenure, sharp focus: he reset the customer success motion across enterprise accounts.
-
-For the frog committee: Celtra is the chapter that establishes the Chief Customer Officer instinct. The skill of taking an enterprise SaaS account base and finding the next dollar of growth inside it is the same skill that turns a frog client engagement into a multi-year relationship.`,
-
-  Deloitte: `Pradeep led the Digital Experience and SaaS Transformation practice for Deloitte Digital's West Region from January 2014 to March 2019 — five years that overlapped exactly with the moment "CX" became a board-level priority.
-
-He was strategic advisor to C-suite executives at HP, Intel, Salesforce, Cisco, Ally Bank, Cigna, and Experian — exactly the cross-industry C-suite portfolio frog wants its VPs running. He delivered end-to-end CX solutions on Adobe Experience Cloud, Salesforce Marketing Cloud, and Google Ad Cloud. He led delivery teams of up to 50 people across onshore and offshore. And he served as Operations Lead for the entire community of practice — meaning he was the person accountable for delivery quality across the practice, not just his own accounts.
-
-For the frog committee: this is the chapter that establishes the Big-5 consulting credentials. He has done this work, in this exact org structure, at scale.`,
-
-  Vivaki: `Pradeep was CTO of Vivaki — Publicis Groupe's hub for digital advertising capabilities — from October 2010 to January 2014. He built the unit from the inside, growing it to 200 people and over $100M in revenue. He stood up the AWS-based data platform that ingested signals from Google, Yahoo, DoubleClick, and Bing — early-cloud, early-bigdata work that became foundational for the entire Publicis network's digital practice.
-
-He shipped the strategic products that made Vivaki credible: Insights on Demand, Campaigns on Demand, Benchtools, Data Hub. He built a delivery org of 50+ architects, product owners, engineers, cloud infra, PMs, and QA.
-
-For the frog committee: Vivaki is the chapter that proves he can be the technologist in the room when frog is selling design-led work. He understands how the data, infrastructure, and product engineering have to align underneath the customer experience layer. Designers and strategists love working with leaders who get this.`,
-
-  Razorfish: `Pradeep spent five and a half years at Razorfish — June 2005 to September 2010 — the last four as Group Vice President, Technology for the West Region. He was part of the 8-person executive team running a $50M+ regional business inside a $300M+ global agency — the original digital experience agency, eventually acquired by Microsoft for $6 billion.
-
-He led $40M+ in business development wins. He grew the technology organization from 30 to 50. He stood up Centers of Excellence in JEE, .Net, Content Management, E-Commerce, and UX. He held some of the highest delivery margins in the company at 20-25%. The client portfolio: Visa, Genentech, Microsoft, Sony, Intel, NFL, Mattel, CBS, Yahoo.
-
-The detail that matters most for this audience: during this period, Pradeep partnered directly with frog Design on the Sun Microsystems engagement. He has worked alongside frog. He knows how the firm operates from inside the project room. For the frog committee: this isn't a candidate making his case from the outside — this is someone coming back to a partnership that worked twenty years ago.`
-};
-
-const cannedClient = (client) => `Live AI is offline at the moment, so I can't generate a custom take on ${client} on the fly. The short version: Pradeep's experience spans the three industries frog has asked him to cover — CPG, Financial Services, and Healthcare — across both Big Consulting (Deloitte, IBM) and design-led agency work (Razorfish, Vivaki). His current IBM Life Sciences book includes Abbott, Illumina, Genentech, AbbVie, and Regeneron, with a strong Generative AI through-line.
-
-For a real, specific conversation about ${client} — what their CX challenge looks like today, why his mix uniquely fits it, and what he'd propose in the first 90 days — please reach out at pradeepananth@gmail.com.`;
-
-// ============================================================
 // COMPONENT
 // ============================================================
 export default function PradeepResume() {
-  const [messages, setMessages] = useState([]);   // chat history sent to API
-  const [bubbles, setBubbles]   = useState([]);   // displayed bubbles {role, text, isThinking}
-  const [busy, setBusy]         = useState(false);
-  const [clientInput, setClientInput] = useState('');
   const [meshPaths, setMeshPaths] = useState([100, 110, 120, 130, 140]);
-  const messagesEndRef = useRef(null);
-
-  // Auto-scroll chat when new bubbles appear
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    }
-  }, [bubbles]);
 
   // Animate decorative SVG mesh
   useEffect(() => {
@@ -142,104 +24,6 @@ export default function PradeepResume() {
     }, 40);
     return () => clearInterval(interval);
   }, []);
-
-  // ------------- chat ask -----------------
-  // `fallback` is the canned text to use if the live API call fails
-  // (deployed page without proxy, local dev, rate limit, network error, etc.)
-  async function ask(question, displayLabel, fallback) {
-    if (!question || !question.trim() || busy) return;
-    setBusy(true);
-
-    const newUserBubble = { role: 'user', text: displayLabel || question };
-    const thinkingBubble = { role: 'assistant', text: '◇ thinking ◇', isThinking: true };
-    setBubbles(prev => [...prev, newUserBubble, thinkingBubble]);
-
-    const newMessages = [...messages, { role: 'user', content: question }];
-    setMessages(newMessages);
-
-    let text = null;
-    let usedFallback = false;
-
-    try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "anthropic-version": "2023-06-01"
-        },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1024,
-          system: SYSTEM_PROMPT,
-          messages: newMessages
-        })
-      });
-      if (!response.ok) {
-        const body = await response.text().catch(() => '');
-        throw new Error(`API ${response.status}: ${body.slice(0, 300)}`);
-      }
-      const data = await response.json();
-      text = data.content
-        .filter(b => b.type === 'text')
-        .map(b => b.text)
-        .join('\n');
-    } catch (err) {
-      console.warn('[Pradeep AI] live API unavailable, using canned response:', err);
-      text = fallback || "I can't reach the live model from here. Please reach out directly at pradeepananth@gmail.com.";
-      usedFallback = true;
-    }
-
-    // Replace thinking bubble with empty assistant bubble, then type out
-    setBubbles(prev => [...prev.slice(0, -1), { role: 'assistant', text: '', isFallback: usedFallback }]);
-
-    let i = 0;
-    const tick = () => {
-      if (i < text.length) {
-        const slice = text.slice(0, i + 2);
-        setBubbles(prev => {
-          const next = [...prev];
-          next[next.length - 1] = { role: 'assistant', text: slice, isFallback: usedFallback };
-          return next;
-        });
-        i += 2;
-        setTimeout(tick, 8);
-      } else {
-        setBubbles(prev => {
-          const next = [...prev];
-          next[next.length - 1] = { role: 'assistant', text, isFallback: usedFallback };
-          return next;
-        });
-        setBusy(false);
-      }
-    };
-    tick();
-
-    if (!usedFallback) {
-      setMessages([...newMessages, { role: 'assistant', content: text }]);
-    } else {
-      // Don't append fallback to API conversation history
-      setBusy(false);
-    }
-  }
-
-  function askChapter(c) {
-    ask(
-      `Summarize what Pradeep did at ${c.full}. Focus on what's most relevant to evaluating him for a market-facing Vice President role at frog (Capgemini Invent). Cover: scope of role, business outcomes, the kinds of clients/work, team or P&L size, and what it tells the committee about how he operates.`,
-      `Tell me about ${c.label}.`,
-      CANNED[c.key]
-    );
-  }
-
-  function askClient() {
-    const c = clientInput.trim();
-    if (!c) return;
-    setClientInput('');
-    ask(
-      `The frog hiring committee is asking how Pradeep would bring value to ${c}. Based on his actual experience and POV, give a specific, grounded take: what's the likely CX challenge at ${c} today, why Pradeep's background uniquely suits it, and what he would propose in the first 90 days of an engagement. Be concrete, not generic.`,
-      `How would Pradeep bring value to ${c}?`,
-      cannedClient(c)
-    );
-  }
 
   // Build mesh path strings from animated yOffsets
   const meshD = meshPaths.map(y => `M0,${y} Q50,${y - 80} 100,${y} T200,${y}`);
@@ -273,77 +57,20 @@ export default function PradeepResume() {
       {/* HERO */}
       <section className="hero">
         <div className="wrap">
-          <div className="hero-grid">
-            <div>
-              <div className="eyebrow">Customer Experience &mdash; Reimagined for the AI Era</div>
-              <h1 className="display">
-                Pradeep<br/>
-                <span className="it">Ananth.</span>
-              </h1>
-              <p className="lede">
-                Two decades reinventing how the world&rsquo;s most ambitious companies meet their customers. Today, helping life&nbsp;sciences leaders translate <em>generative&nbsp;AI</em> into customer experiences that actually move outcomes.
-              </p>
-              <div className="hero-meta">
-                <span>Partner, IBM Consulting</span>
-                <span>Customer Transformation, Life Sciences</span>
-                <span>20+ Years</span>
-                <span>San Francisco</span>
-              </div>
-            </div>
-
-            {/* AI Chat */}
-            <div className="chat-card">
-              <div className="chat-head">
-                <div className="chat-title"><span className="pulse"/> Ask Pradeep&rsquo;s AI</div>
-                <div className="chat-badge">Powered by Claude</div>
-              </div>
-              <div className="chat-prompt">
-                Pick a chapter to <em>summarize</em>, or name a client and I&rsquo;ll show you how I&rsquo;d bring value.
-              </div>
-
-              <div className="chat-mode">
-                <div className="chat-mode-label">Summarize a chapter</div>
-                <div className="chat-chips">
-                  {CHAPTERS.map(c => (
-                    <button
-                      key={c.key}
-                      className="chip"
-                      disabled={busy}
-                      onClick={() => askChapter(c)}
-                    >{c.label}</button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="chat-mode">
-                <div className="chat-mode-label">Apply to a client</div>
-                <div className="chat-input-row">
-                  <input
-                    className="chat-input"
-                    type="text"
-                    placeholder="e.g., Roche, JPMorgan, Procter & Gamble…"
-                    value={clientInput}
-                    onChange={e => setClientInput(e.target.value)}
-                    onKeyDown={e => e.key === 'Enter' && askClient()}
-                    autoComplete="off"
-                  />
-                  <button className="chat-send" onClick={askClient} disabled={busy}>
-                    {busy ? 'Thinking…' : 'Show me'}
-                  </button>
-                </div>
-              </div>
-
-              {bubbles.length > 0 && (
-                <div className="chat-messages">
-                  {bubbles.map((b, idx) => (
-                    <div
-                      key={idx}
-                      className={`msg ${b.role === 'user' ? 'you' : 'bot'}${b.isThinking ? ' thinking' : ''}`}
-                    >{b.text}</div>
-                  ))}
-                  <div ref={messagesEndRef}/>
-                </div>
-              )}
+          <div className="hero-content">
+            <div className="eyebrow">Customer Experience &mdash; Reimagined for the AI Era</div>
+            <h1 className="display">
+              Pradeep<br/>
+              <span className="it">Ananth.</span>
+            </h1>
+            <p className="lede">
+              Two decades reinventing how the world&rsquo;s most ambitious companies meet their customers. Today, helping life&nbsp;sciences leaders translate <em>generative&nbsp;AI</em> into customer experiences that actually move outcomes.
+            </p>
+            <div className="hero-meta">
+              <span>Partner, IBM Consulting</span>
+              <span>Customer Transformation, Life Sciences</span>
+              <span>20+ Years</span>
+              <span>San Francisco</span>
             </div>
           </div>
 
@@ -557,17 +284,38 @@ export default function PradeepResume() {
           </div>
 
           <p className="pov-quote">
-            Generative AI isn&rsquo;t a feature you bolt onto CX. It&rsquo;s the new operating system for the customer relationship itself.
+            The most liberating thing about LLMs isn&rsquo;t productivity &mdash; it&rsquo;s that you can finally vibe-anything.
           </p>
-          <div className="pov-attr">&mdash; Pradeep, on what&rsquo;s actually changing</div>
+          <div className="pov-attr">&mdash; Pradeep, on the new craft</div>
 
           <div className="pov-grid">
-            <PovCard h="The pharma paradox"
-              body="Life sciences companies are simultaneously the most data-rich and most CX-conservative organizations on the planet. The same regulatory rigor that has slowed down meaningful customer-experience innovation is exactly the discipline that will let them lead, once GenAI is deployed responsibly."/>
-            <PovCard h="From content factory to context engine"
-              body="The modern CX function isn't a content factory; it's a context engine. The teams that win in the next five years will treat every interaction as a generative event — assembled in the moment from approved building blocks, governed by trust, measured by outcome."/>
-            <PovCard h="Services orgs are the unlock"
-              body="Most enterprises don't have a technology problem. They have a translation problem. The job is to bridge boardroom ambition, brand voice, regulated reality, and engineering throughput. That bridge is built by services leaders who have lived in all four worlds."/>
+            <PovCard h="Vibe-anything."
+              body={<>For decades, creating any artifact meant doing two heavy things at once: holding the intent in your head while translating it into precise language. That translation tax crushed the original vibe. LLMs flip the equation &mdash; allocate 100% of your energy to the intent, let the model handle the words. Vibe-coding was just the start. The same shift applies to decks, strategy docs, podcasts, brand frameworks. To anything we make.</>}/>
+            <PovCard h="The vibe has to survive the journey."
+              body={<>A recent client tech primer started as a 5-minute voice note in a parking lot &mdash; captured raw, waiting for my son after basketball. NotebookLM turned it into a deck outline. An image model turned it into an infographic. A podcast version let me hear my own ideas as an outsider would. The final artifact was a synthesis of all those expressions. The raw material was five minutes of pure thought.</>}/>
+            <PovCard h="Wisdom over articulation."
+              body={<><em>Cogito, ergo sum</em> defined human worth by the ability to think &mdash; to form complex sequences of words and logic. As Harari put it recently at Davos, that definition is now a trap. AI has mastered thoughts-as-words; we can&rsquo;t out-articulate the machine. The work now is to stop performing intelligence and start practicing wisdom &mdash; the kind algorithms can&rsquo;t parse.</>}/>
+          </div>
+
+          {/* FEATURED WORKING PAPER */}
+          <div className="pov-feature">
+            <div className="pov-feature-label"><span>◆</span> Working paper &middot; August 2025</div>
+            <h3 className="pov-feature-title">The Age of the Agent.</h3>
+            <p className="pov-feature-sub">A bold vision for an AI-first marketing organization.</p>
+            <p className="pov-feature-thesis">
+              Always-on, fully personalized marketing has been the promised land for a decade &mdash; every CMS, CDP, CRM, marketing-automation, and data-lake investment was supposed to take us there. None did. Agentic AI is the missing layer, and the economics are finally working.
+            </p>
+            <div className="pov-feature-grid">
+              <FeatureCard n="01" h="What changes."
+                body="Static, pre-programmed responses give way to four agentic traits: continuous perception, autonomous decision-making, proactive behavior, and dynamic adaptability. The unit of work becomes outcomes orchestrated, not tasks completed."/>
+              <FeatureCard n="02" h="The architecture."
+                body={<>Humans orchestrate a network. <em>Autonomous Super Agents</em> &mdash; built on enterprise platforms like AWS Bedrock &mdash; direct <em>Specialized Task Agents</em> built on Martech (Writer, Adobe, Salesforce). Pods own objectives and KPIs.</>}/>
+              <FeatureCard n="03" h="The new org chart."
+                body={<>The pyramid flattens into a Symphony of Human and Machine. Humans become <em>Experience Orchestrators</em> &mdash; Growth Strategists, AI Agent Architects, Empathy Weavers, Ethical Governors. The AI workforce stands up Sentient Market Analysts, Hyper-Personalization Engines, Autonomous Creative Studios.</>}/>
+              <FeatureCard n="04" h="The path."
+                body={<>Three phases. <em>Launch &amp; Empower</em> (automate, train, build trust). <em>Align &amp; Accelerate</em> (custom co-pilots, integrated workflows). <em>Anticipate &amp; Elevate</em> (autonomous networks with human oversight).</>}/>
+            </div>
+            <p className="pov-feature-foot">Full working paper, including reference dashboards from a regulated-industry pilot, available on request.</p>
           </div>
         </div>
       </section>
@@ -708,6 +456,16 @@ function PovCard({ h, body }) {
   );
 }
 
+function FeatureCard({ n, h, body }) {
+  return (
+    <div className="pov-feature-card">
+      <div className="pov-feature-num">{n}</div>
+      <h5>{h}</h5>
+      <p>{body}</p>
+    </div>
+  );
+}
+
 function RecItem({ name, detail }) {
   return (
     <div className="rec-item">
@@ -775,52 +533,17 @@ const CSS = `
   @media (max-width: 760px) { .top-nav { display: none; } }
 
   /* HERO */
-  .hero { padding: 80px 0 60px; position: relative; }
-  .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: end; }
-  @media (max-width: 980px) { .hero-grid { grid-template-columns: 1fr; gap: 40px; } }
-  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); display: inline-flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+  .hero { padding: 100px 0 80px; position: relative; }
+  .hero-content { max-width: 900px; position: relative; z-index: 2; }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); display: inline-flex; align-items: center; gap: 10px; margin-bottom: 32px; }
   .eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--accent); }
-  .display { font-family: var(--serif); font-weight: 400; font-size: clamp(64px, 10vw, 168px); line-height: 0.86; letter-spacing: -0.04em; color: var(--ink); font-variation-settings: "opsz" 144, "SOFT" 50; }
+  .display { font-family: var(--serif); font-weight: 400; font-size: clamp(72px, 13vw, 220px); line-height: 0.86; letter-spacing: -0.045em; color: var(--ink); font-variation-settings: "opsz" 144, "SOFT" 50; }
   .display .it { font-style: italic; font-weight: 300; color: var(--ink-soft); }
-  .lede { font-family: var(--serif); font-size: clamp(20px, 1.6vw, 26px); line-height: 1.35; color: var(--ink-soft); font-weight: 300; max-width: 36ch; margin-top: 28px; }
+  .lede { font-family: var(--serif); font-size: clamp(22px, 2vw, 32px); line-height: 1.3; color: var(--ink-soft); font-weight: 300; max-width: 36ch; margin-top: 36px; }
   .lede em { color: var(--accent); font-style: italic; }
-  .hero-meta { display: flex; flex-wrap: wrap; gap: 18px 32px; margin-top: 36px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; color: var(--ink-soft); }
+  .hero-meta { display: flex; flex-wrap: wrap; gap: 18px 32px; margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--rule); font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; color: var(--ink-soft); max-width: 900px; }
   .hero-meta span { display: inline-flex; align-items: center; gap: 8px; }
   .hero-meta span::before { content: "◆"; color: var(--accent); font-size: 9px; }
-
-  /* CHAT CARD */
-  .chat-card { background: var(--ink); color: var(--paper); border-radius: 24px; padding: 28px; box-shadow: 0 24px 60px -24px rgba(22,17,13,0.45); position: relative; overflow: hidden; }
-  .chat-card::before { content: ""; position: absolute; inset: -2px; background: radial-gradient(120% 60% at 100% 0%, rgba(200,65,42,0.25), transparent 60%); pointer-events: none; }
-  .chat-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; position: relative; }
-  .chat-title { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--paper-2); display: flex; align-items: center; gap: 10px; }
-  .pulse { width: 8px; height: 8px; border-radius: 50%; background: #6FCF97; box-shadow: 0 0 0 0 rgba(111,207,151,0.6); animation: pulse 2s infinite; }
-  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(111,207,151,0.6); } 70% { box-shadow: 0 0 0 10px rgba(111,207,151,0); } 100% { box-shadow: 0 0 0 0 rgba(111,207,151,0); } }
-  .chat-badge { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3); border: 1px solid rgba(241,234,217,0.18); padding: 4px 10px; border-radius: 999px; }
-  .chat-prompt { font-family: var(--serif); font-size: 22px; line-height: 1.3; font-weight: 300; color: var(--paper); margin-bottom: 22px; position: relative; }
-  .chat-prompt em { color: var(--accent); font-style: italic; }
-  .chat-messages { display: flex; flex-direction: column; gap: 14px; max-height: 320px; overflow-y: auto; padding-right: 4px; scrollbar-width: thin; scrollbar-color: rgba(241,234,217,0.2) transparent; margin-top: 22px; padding-top: 22px; border-top: 1px solid rgba(241,234,217,0.1); }
-  .chat-messages::-webkit-scrollbar { width: 4px; }
-  .chat-messages::-webkit-scrollbar-thumb { background: rgba(241,234,217,0.2); border-radius: 2px; }
-  .msg { font-size: 14px; line-height: 1.55; padding: 12px 16px; border-radius: 14px; max-width: 90%; animation: fadein .4s ease; white-space: pre-wrap; }
-  @keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-  .msg.you { background: var(--accent); color: var(--paper); align-self: flex-end; border-bottom-right-radius: 4px; }
-  .msg.bot { background: rgba(241,234,217,0.08); color: var(--paper-2); border: 1px solid rgba(241,234,217,0.1); align-self: flex-start; border-bottom-left-radius: 4px; }
-  .msg.bot.thinking { font-family: var(--mono); font-size: 12px; letter-spacing: 0.05em; color: var(--paper-3); opacity: 0.7; }
-  .chat-input-row { display: flex; gap: 10px; }
-  .chat-input { flex: 1; background: rgba(241,234,217,0.07); border: 1px solid rgba(241,234,217,0.14); color: var(--paper); padding: 14px 16px; border-radius: 12px; font-family: var(--sans); font-size: 14px; transition: border .2s ease; }
-  .chat-input:focus { outline: none; border-color: var(--accent); }
-  .chat-input::placeholder { color: rgba(241,234,217,0.4); }
-  .chat-send { background: var(--accent); border: 0; color: var(--paper); padding: 0 22px; border-radius: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer; transition: background .2s ease; }
-  .chat-send:hover:not(:disabled) { background: #B83820; }
-  .chat-send:disabled { opacity: 0.5; cursor: wait; }
-  .chat-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .chip { font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; background: transparent; color: var(--paper-3); border: 1px solid rgba(241,234,217,0.18); padding: 7px 12px; border-radius: 999px; cursor: pointer; transition: all .2s ease; }
-  .chip:hover:not(:disabled) { background: rgba(200,65,42,0.15); color: var(--paper); border-color: var(--accent); }
-  .chip:disabled { opacity: 0.5; cursor: wait; }
-  .chat-mode { margin-top: 18px; }
-  .chat-mode + .chat-mode { margin-top: 22px; padding-top: 22px; border-top: 1px solid rgba(241,234,217,0.1); }
-  .chat-mode-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--paper-3); margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
-  .chat-mode-label::before { content: ""; width: 14px; height: 1px; background: var(--accent); }
 
   /* STATS */
   .stats { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-top: 80px; }
@@ -943,6 +666,75 @@ const CSS = `
   .pov-card h4 { font-family: var(--serif); font-weight: 500; font-size: 22px; color: var(--paper); margin-bottom: 12px; letter-spacing: -0.01em; }
   .pov-card p { font-family: var(--sans); font-size: 15px; line-height: 1.6; color: var(--paper-2); }
 
+  /* WORKING PAPER FEATURE inside POV */
+  .pov-feature {
+    margin-top: 96px;
+    padding: 64px 0 0;
+    border-top: 1px solid rgba(241,234,217,0.3);
+    position: relative;
+  }
+  .pov-feature-label {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: rgba(241,234,217,0.7);
+    display: inline-flex; align-items: center; gap: 10px;
+    margin-bottom: 28px;
+  }
+  .pov-feature-label span { color: var(--paper); font-size: 8px; }
+  .pov-feature-title {
+    font-family: var(--serif); font-weight: 400; font-style: italic;
+    font-size: clamp(44px, 6vw, 88px); line-height: 0.95;
+    color: var(--paper); letter-spacing: -0.03em;
+  }
+  .pov-feature-sub {
+    font-family: var(--serif); font-weight: 300; font-style: italic;
+    font-size: clamp(20px, 2vw, 26px); line-height: 1.3;
+    color: rgba(241,234,217,0.85);
+    margin-top: 12px;
+    max-width: 30ch;
+  }
+  .pov-feature-thesis {
+    font-family: var(--serif); font-weight: 300; font-size: clamp(18px, 1.4vw, 22px);
+    line-height: 1.55; color: var(--paper);
+    margin-top: 40px; max-width: 56ch;
+    padding-left: 28px;
+    border-left: 2px solid rgba(241,234,217,0.4);
+  }
+  .pov-feature-grid {
+    margin-top: 56px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px;
+  }
+  @media (max-width: 980px) { .pov-feature-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .pov-feature-grid { grid-template-columns: 1fr; } }
+  .pov-feature-card {
+    background: rgba(0, 0, 0, 0.16);
+    border: 1px solid rgba(241,234,217,0.18);
+    border-radius: 12px;
+    padding: 24px 22px;
+  }
+  .pov-feature-num {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+    color: rgba(241,234,217,0.7);
+    margin-bottom: 14px;
+  }
+  .pov-feature-card h5 {
+    font-family: var(--serif); font-weight: 500; font-size: 19px;
+    line-height: 1.2; color: var(--paper);
+    letter-spacing: -0.01em; margin-bottom: 12px;
+  }
+  .pov-feature-card p {
+    font-family: var(--sans); font-size: 14px; line-height: 1.55;
+    color: var(--paper-2);
+  }
+  .pov-feature-card p em {
+    color: var(--paper); font-style: normal; font-weight: 600;
+  }
+  .pov-feature-foot {
+    margin-top: 40px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: rgba(241,234,217,0.65);
+    text-align: right;
+  }
+
   /* EDU */
   .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 32px; }
   @media (max-width: 760px) { .edu-grid { grid-template-columns: 1fr; gap: 32px; } }
@@ -976,7 +768,7 @@ const CSS = `
   .footer-strip .made span { color: var(--accent); }
 
   /* MESH */
-  .mesh { position: absolute; right: -10%; top: 8%; width: 50%; height: 70%; pointer-events: none; opacity: 0.5; z-index: 0; }
+  .mesh { position: absolute; right: -8%; top: 6%; width: 55%; height: 80%; pointer-events: none; opacity: 0.4; z-index: 1; }
   @media (max-width: 980px) { .mesh { display: none; } }
-  .mesh path { fill: none; stroke: var(--accent); stroke-width: 0.4; opacity: 0.4; }
+  .mesh path { fill: none; stroke: var(--accent); stroke-width: 0.4; opacity: 0.5; }
 `;
