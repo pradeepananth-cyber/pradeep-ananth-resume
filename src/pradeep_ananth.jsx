@@ -299,7 +299,7 @@ export default function PradeepResume() {
 
           {/* FEATURED WORKING PAPER */}
           <div className="pov-feature">
-            <div className="pov-feature-label"><span>◆</span> Working paper &middot; August 2025</div>
+            <div className="pov-feature-label"><span>◆</span> Working paper &middot; April 2026</div>
             <h3 className="pov-feature-title">The Age of the Agent.</h3>
             <p className="pov-feature-sub">A bold vision for an AI-first marketing organization.</p>
             <p className="pov-feature-thesis">
