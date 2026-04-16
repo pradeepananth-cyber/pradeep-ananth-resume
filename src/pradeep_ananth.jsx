@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 // ============================================================
 // DATA
@@ -9,25 +9,47 @@ const MARQUEE = [
   'Singapore Airlines','NFL','CBS','Mattel','Taco Bell','Yahoo','Sun Microsystems'
 ];
 
+// 4x6 mosaic for the hero. Slugs map to Simple Icons CDN
+// (https://cdn.simpleicons.org/{slug}). When a slug doesn't exist
+// in the library, the LogoTile component falls back to a styled
+// wordmark — so pharma/biotech brands that aren't on Simple Icons
+// still render cleanly.
+const CLIENT_LOGOS = [
+  { name: 'Microsoft',          slug: 'microsoft' },
+  { name: 'Abbott',             slug: 'abbott' },
+  { name: 'Visa',               slug: 'visa' },
+  { name: 'Adidas',             slug: 'adidas' },
+
+  { name: 'Adobe',              slug: 'adobe' },
+  { name: 'AbbVie',             slug: 'abbvie' },
+  { name: 'NFL',                slug: 'nfl' },
+  { name: 'Procter & Gamble',   slug: 'procterandgamble' },
+
+  { name: 'Salesforce',         slug: 'salesforce' },
+  { name: 'Illumina',           slug: 'illumina' },
+  { name: 'Sony',               slug: 'sony' },
+  { name: 'Unilever',           slug: 'unilever' },
+
+  { name: 'Intel',              slug: 'intel' },
+  { name: 'Regeneron',          slug: null },
+  { name: 'Singapore Airlines', slug: 'singaporeairlines' },
+  { name: 'Mattel',             slug: 'mattel' },
+
+  { name: 'Cisco',              slug: 'cisco' },
+  { name: 'Genentech',          slug: null },
+  { name: 'Ally',               slug: 'ally' },
+  { name: 'Taco Bell',          slug: 'tacobell' },
+
+  { name: 'HP',                 slug: 'hp' },
+  { name: 'Cigna',              slug: 'cigna' },
+  { name: 'Experian',           slug: 'experian' },
+  { name: 'CBS',                slug: 'cbs' }
+];
+
 // ============================================================
 // COMPONENT
 // ============================================================
 export default function PradeepResume() {
-  const [meshPaths, setMeshPaths] = useState([100, 110, 120, 130, 140]);
-
-  // Animate decorative SVG mesh
-  useEffect(() => {
-    let t = 0;
-    const interval = setInterval(() => {
-      t += 0.02;
-      setMeshPaths(prev => prev.map((_, i) => 100 + i * 10 + Math.sin(t + i * 0.5) * 8));
-    }, 40);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Build mesh path strings from animated yOffsets
-  const meshD = meshPaths.map(y => `M0,${y} Q50,${y - 80} 100,${y} T200,${y}`);
-
   // Manual smooth-scroll for nav links (anchor links can be flaky in iframes / artifact sandboxes)
   const navTo = (id) => (e) => {
     e.preventDefault();
@@ -57,27 +79,36 @@ export default function PradeepResume() {
       {/* HERO */}
       <section className="hero">
         <div className="wrap">
-          <div className="hero-content">
-            <div className="eyebrow">Customer Experience &mdash; Reimagined for the AI Era</div>
-            <h1 className="display">
-              Pradeep<br/>
-              <span className="it">Ananth.</span>
-            </h1>
-            <p className="lede">
-              Two decades reinventing how the world&rsquo;s most ambitious companies meet their customers. Today, helping life&nbsp;sciences leaders translate <em>generative&nbsp;AI</em> into customer experiences that actually move outcomes.
-            </p>
-            <div className="hero-meta">
-              <span>Partner, IBM Consulting</span>
-              <span>Customer Transformation, Life Sciences</span>
-              <span>20+ Years</span>
-              <span>San Francisco</span>
+          <div className="hero-grid">
+            <div className="hero-content">
+              <div className="eyebrow">Customer Experience &mdash; Reimagined for the AI Era</div>
+              <h1 className="display">
+                Pradeep<br/>
+                <span className="it">Ananth.</span>
+              </h1>
+              <p className="lede">
+                Two decades reinventing how the world&rsquo;s most ambitious companies meet their customers. Today, helping life&nbsp;sciences leaders translate <em>generative&nbsp;AI</em> into customer experiences that actually move outcomes.
+              </p>
+              <div className="hero-meta">
+                <span>Partner, IBM Consulting</span>
+                <span>Customer Transformation, Life Sciences</span>
+                <span>20+ Years</span>
+                <span>San Francisco</span>
+              </div>
+            </div>
+
+            {/* Logo mosaic */}
+            <div className="logo-side">
+              <div className="logo-side-label">
+                <span>◆</span> Selected clients across two decades
+              </div>
+              <div className="logo-mosaic">
+                {CLIENT_LOGOS.map(c => (
+                  <LogoTile key={c.name} name={c.name} slug={c.slug}/>
+                ))}
+              </div>
             </div>
           </div>
-
-          {/* Decorative mesh */}
-          <svg className="mesh" viewBox="0 0 200 200" preserveAspectRatio="none">
-            {meshD.map((d, i) => <path key={i} d={d}/>)}
-          </svg>
         </div>
       </section>
 
@@ -299,7 +330,7 @@ export default function PradeepResume() {
 
           {/* FEATURED WORKING PAPER */}
           <div className="pov-feature">
-            <div className="pov-feature-label"><span>◆</span> Working paper &middot; April 2026</div>
+            <div className="pov-feature-label"><span>◆</span> Working paper &middot; August 2025</div>
             <h3 className="pov-feature-title">The Age of the Agent.</h3>
             <p className="pov-feature-sub">A bold vision for an AI-first marketing organization.</p>
             <p className="pov-feature-thesis">
@@ -478,6 +509,25 @@ function RecItem({ name, detail }) {
   );
 }
 
+function LogoTile({ name, slug }) {
+  // If no slug, or if the SVG fails to load, fall back to a styled wordmark.
+  const [failed, setFailed] = useState(!slug);
+  return (
+    <div className="logo-tile" title={name}>
+      {failed ? (
+        <span className="logo-text">{name}</span>
+      ) : (
+        <img
+          src={`https://cdn.simpleicons.org/${slug}`}
+          alt={name}
+          onError={() => setFailed(true)}
+          loading="lazy"
+        />
+      )}
+    </div>
+  );
+}
+
 // ============================================================
 // CSS — kept as a single template literal for portability
 // ============================================================
@@ -533,17 +583,75 @@ const CSS = `
   @media (max-width: 760px) { .top-nav { display: none; } }
 
   /* HERO */
-  .hero { padding: 100px 0 80px; position: relative; }
-  .hero-content { max-width: 900px; position: relative; z-index: 2; }
-  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); display: inline-flex; align-items: center; gap: 10px; margin-bottom: 32px; }
+  .hero { padding: 80px 0 70px; position: relative; }
+  .hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: end; }
+  @media (max-width: 980px) { .hero-grid { grid-template-columns: 1fr; gap: 56px; } }
+  .hero-content { position: relative; z-index: 2; }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); display: inline-flex; align-items: center; gap: 10px; margin-bottom: 28px; }
   .eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--accent); }
-  .display { font-family: var(--serif); font-weight: 400; font-size: clamp(72px, 13vw, 220px); line-height: 0.86; letter-spacing: -0.045em; color: var(--ink); font-variation-settings: "opsz" 144, "SOFT" 50; }
+  .display { font-family: var(--serif); font-weight: 400; font-size: clamp(56px, 9vw, 132px); line-height: 0.86; letter-spacing: -0.04em; color: var(--ink); font-variation-settings: "opsz" 144, "SOFT" 50; }
   .display .it { font-style: italic; font-weight: 300; color: var(--ink-soft); }
-  .lede { font-family: var(--serif); font-size: clamp(22px, 2vw, 32px); line-height: 1.3; color: var(--ink-soft); font-weight: 300; max-width: 36ch; margin-top: 36px; }
+  .lede { font-family: var(--serif); font-size: clamp(20px, 1.7vw, 26px); line-height: 1.35; color: var(--ink-soft); font-weight: 300; max-width: 36ch; margin-top: 32px; }
   .lede em { color: var(--accent); font-style: italic; }
-  .hero-meta { display: flex; flex-wrap: wrap; gap: 18px 32px; margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--rule); font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; color: var(--ink-soft); max-width: 900px; }
+  .hero-meta { display: flex; flex-wrap: wrap; gap: 16px 28px; margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--rule); font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; color: var(--ink-soft); }
   .hero-meta span { display: inline-flex; align-items: center; gap: 8px; }
   .hero-meta span::before { content: "◆"; color: var(--accent); font-size: 9px; }
+
+  /* LOGO MOSAIC (right side of hero) */
+  .logo-side { position: relative; z-index: 2; }
+  .logo-side-label {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--ink-soft);
+    margin-bottom: 18px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .logo-side-label span { color: var(--accent); font-size: 8px; }
+  .logo-mosaic {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  @media (max-width: 560px) { .logo-mosaic { grid-template-columns: repeat(3, 1fr); } }
+  .logo-tile {
+    background: var(--paper-2);
+    border-radius: 10px;
+    aspect-ratio: 4 / 3;
+    display: flex; align-items: center; justify-content: center;
+    padding: 14px;
+    transition: all .25s ease;
+    border: 1px solid transparent;
+    overflow: hidden;
+  }
+  .logo-tile:hover {
+    background: var(--paper);
+    border-color: var(--rule);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -16px rgba(22,17,13,0.25);
+  }
+  .logo-tile img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto; height: auto;
+    object-fit: contain;
+    filter: grayscale(1) brightness(0.18) opacity(0.78);
+    transition: filter .3s ease, opacity .3s ease;
+  }
+  .logo-tile:hover img {
+    filter: none;
+    opacity: 1;
+  }
+  .logo-tile .logo-text {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(13px, 1.1vw, 18px);
+    color: var(--ink);
+    text-align: center;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    transition: color .25s ease;
+  }
+  .logo-tile:hover .logo-text { color: var(--accent); }
 
   /* STATS */
   .stats { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-top: 80px; }
@@ -766,9 +874,4 @@ const CSS = `
   .footer-strip { border-top: 1px solid rgba(241,234,217,0.18); margin-top: 96px; padding-top: 32px; display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3); }
   .footer-strip .made { color: var(--paper-3); }
   .footer-strip .made span { color: var(--accent); }
-
-  /* MESH */
-  .mesh { position: absolute; right: -8%; top: 6%; width: 55%; height: 80%; pointer-events: none; opacity: 0.4; z-index: 1; }
-  @media (max-width: 980px) { .mesh { display: none; } }
-  .mesh path { fill: none; stroke: var(--accent); stroke-width: 0.4; opacity: 0.5; }
 `;
