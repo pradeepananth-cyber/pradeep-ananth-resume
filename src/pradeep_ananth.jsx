@@ -189,55 +189,7 @@ export default function PradeepResume() {
             <h2 className="section-title">Twenty years building<br/>services organizations<br/><span className="it">that mattered.</span></h2>
           </div>
 
-          <div className="timeline">
-            <Role
-              year="2023" period="Jul 2023 — Present"
-              title={<>Partner, <span className="it">Customer Transformation, Life Sciences</span></>}
-              co="IBM Consulting — San Francisco, CA"
-              tags={['Life Sciences', 'GenAI / watsonx', 'Adobe Practice', 'CX Transformation', 'C-Suite Advisory']}
-              desc={<>Owning <strong>Customer Experience Transformation</strong> mandates for marquee Life Sciences clients including <strong>Abbott, Illumina, Genentech, AbbVie, and Regeneron</strong>. Grew the Adobe practice at Abbott from <strong>$0 to $20M</strong> over five years. Active GenAI initiatives include the Writer-AI partnership for Abbott&rsquo;s commercial use cases (auto-generated FAQs at scale), Generative Engine Optimization on Abbott&rsquo;s Adobe platform (llms.txt, JSON-LD), and a research-to-territory GenAI engine for Regeneron. Recipient of the <strong>IBM Industry Silver Badge</strong> for industry impact.</>}
-            />
-
-            <Role
-              year="2020" period="May 2020 — Jun 2023"
-              title="Chief Services Officer"
-              co="Hearsay Corp. (Fintech SaaS) — San Francisco, CA"
-              tags={['SaaS Turnaround', 'Financial Services', 'P&L Ownership', 'Org Building']}
-              desc={<>One of seven executives hand-picked by the board to turn around a <strong>$55M ARR</strong> last-mile digital CX business in fintech. GM of the entire client services unit &mdash; Professional Services, Strategic Consulting, Customer Support, Education. Launched value-added services across <strong>Data &amp; Analytics, Content Strategy, and Interactive Design</strong>, building a profitable services org that touched the full customer lifecycle. Clients in Financial Services include <strong>Edward Jones, Wells Fargo, JP Morgan Chase, Fidelity, Farmers Insurance, Guardian, New York Life</strong></>}
-            />
-
-            <Role
-              year="2019" period="Apr 2019 — Apr 2020"
-              title={<>EVP &amp; <span className="it">Chief Customer Officer</span></>}
-              co="Celtra Inc. — San Francisco, CA"
-              tags={['Customer Success', 'SaaS', 'AdTech']}
-              desc={<>Owned retention and growth of a <strong>~$45M ARR</strong> SaaS platform for building and managing dynamic digital advertising at scale. Re-set customer success motion across enterprise accounts. Clients include <strong>Unilever, Procter & Gamble, Reckitt-Benckiser, Adidas, Spotify, Lego</strong></>}
-            />
-
-            <Role
-              year="2014" period="Jan 2014 — Mar 2019"
-              title={<>Digital Experience &amp; <span className="it">SaaS Practice Lead</span></>}
-              co="Deloitte Digital — San Francisco, CA"
-              tags={['Big-5 Consulting', 'Adobe / Salesforce', 'SaaS Transformation', 'C-Suite Advisory']}
-              desc={<>Built and grew the West Region digital experience and SaaS Transformation practice. Strategic advisor to C-suite executives across <strong>HP, Intel, Salesforce, Cisco, Ally Bank, Cigna, Experian</strong>. Delivered end-to-end CX solutions on Adobe Experience Cloud, Salesforce Marketing Cloud, and Google Ad Cloud. Led delivery teams of up to 50 onshore + offshore. Operations Lead for the entire community of practice.</>}
-            />
-
-            <Role
-              year="2010" period="Oct 2010 — Jan 2014"
-              title="Chief Technology Officer"
-              co="Vivaki (Publicis Groupe) — San Francisco, CA"
-              tags={['CTO', 'AWS / Big Data', 'AdTech', 'Product Engineering']}
-              desc={<>Technology leader for Publicis&rsquo; bet on the digital advertising future. Vivaki grew to <strong>200 people and $100M+ in revenue</strong>. Built the data platform that ingested signals from Google, Yahoo, DoubleClick, Bing &mdash; the early-cloud foundation for the agency network&rsquo;s digital practice on the AWS cloud leveraging their first-generation big data offerings like RedShift and DynamoDB. Shipped strategic products: <strong>Insights on Demand, Campaigns on Demand, Benchtools, Data Hub.</strong>Clients include <strong>Disney, Microsoft, WeightWatchers</strong></>}
-            />
-
-            <Role
-              year="2005" period="Jun 2005 — Sep 2010"
-              title={<>Group Vice President, <span className="it">Technology — West</span></>}
-              co="Razorfish — San Francisco, CA"
-              tags={['Agency Exec', '$50M+ P&L', 'frog x Sun Microsystems', 'Multi-industry']}
-              desc={<>Part of the 8-person executive management team running a <strong>$50M+ West Region business</strong> within a $300M+ global agency (acquired by Microsoft for $6B). Clients: <strong>Visa, Genentech, Microsoft, Sony, Intel, NFL, Mattel, CBS, PG&amp;E, Yahoo</strong>. Led $40M+ in business development wins. Grew the technology organization from 30 to 50 people. Held some of the highest delivery margins (20-25%) in the company. <em>Notably &mdash; partnered directly with frog Design on the Sun Microsystems engagement during this period.</em></>}
-            />
-          </div>
+          <CareerArc />
         </div>
       </section>
       {/* FOR FROG */}
@@ -421,19 +373,158 @@ function Industry({ name, items }) {
   );
 }
 
-function Role({ year, period, title, co, tags, desc }) {
+// ============================================================
+// CAREER ARC DATA (chronological)
+// ============================================================
+const ROLES = [
+  {
+    id: 'razorfish',
+    startYear: 2005,
+    period: 'Jun 2005 — Sep 2010',
+    company: 'Razorfish',
+    location: 'San Francisco, CA',
+    title: <>Group Vice President, <span className="it">Technology — West</span></>,
+    tags: ['Agency Exec', '$50M+ P&L', 'frog x Sun Microsystems', 'Multi-industry'],
+    desc: <>Part of the 8-person executive management team running a <strong>$50M+ West Region business</strong> within a $300M+ global agency (acquired by Microsoft for $6B). Clients: <strong>Visa, Genentech, Microsoft, Sony, Intel, NFL, Mattel, CBS, PG&amp;E, Yahoo</strong>. Led $40M+ in business development wins. Grew the technology organization from 30 to 50 people. Held some of the highest delivery margins (20-25%) in the company. <em>Notably &mdash; partnered directly with frog Design on the Sun Microsystems engagement during this period.</em></>
+  },
+  {
+    id: 'vivaki',
+    startYear: 2010,
+    period: 'Oct 2010 — Jan 2014',
+    company: 'Vivaki',
+    location: 'Publicis Groupe, San Francisco, CA',
+    title: 'Chief Technology Officer',
+    tags: ['CTO', 'AWS / Big Data', 'AdTech', 'Product Engineering'],
+    desc: <>Technology leader for Publicis&rsquo; bet on the digital advertising future. Vivaki grew to <strong>200 people and $100M+ in revenue</strong>. Built the data platform that ingested signals from Google, Yahoo, DoubleClick, Bing &mdash; the early-cloud foundation for the agency network&rsquo;s digital practice. Shipped strategic products: <strong>Insights on Demand, Campaigns on Demand, Benchtools, Data Hub.</strong></>
+  },
+  {
+    id: 'deloitte',
+    startYear: 2014,
+    period: 'Jan 2014 — Mar 2019',
+    company: 'Deloitte Digital',
+    location: 'San Francisco, CA',
+    title: <>Digital Experience &amp; <span className="it">SaaS Practice Lead</span></>,
+    tags: ['Big-5 Consulting', 'Adobe / Salesforce', 'SaaS Transformation', 'C-Suite Advisory'],
+    desc: <>Built and grew the West Region digital experience and SaaS Transformation practice. Strategic advisor to C-suite executives across <strong>HP, Intel, Salesforce, Cisco, Ally Bank, Cigna, Experian</strong>. Delivered end-to-end CX solutions on Adobe Experience Cloud, Salesforce Marketing Cloud, and Google Ad Cloud. Led delivery teams of up to 50 onshore + offshore. Operations Lead for the entire community of practice.</>
+  },
+  {
+    id: 'celtra',
+    startYear: 2019,
+    period: 'Apr 2019 — Apr 2020',
+    company: 'Celtra',
+    location: 'San Francisco, CA',
+    title: <>EVP &amp; <span className="it">Chief Customer Officer</span></>,
+    tags: ['Customer Success', 'SaaS', 'AdTech'],
+    desc: <>Owned retention and growth of a <strong>~$45M ARR</strong> SaaS platform for building and managing dynamic digital advertising at scale. Re-set customer success motion across enterprise accounts.</>
+  },
+  {
+    id: 'hearsay',
+    startYear: 2020,
+    period: 'May 2020 — Jun 2023',
+    company: 'Hearsay',
+    location: 'Fintech SaaS, San Francisco, CA',
+    title: 'Chief Services Officer',
+    tags: ['SaaS Turnaround', 'Financial Services', 'P&L Ownership', 'Org Building'],
+    desc: <>One of seven executives hand-picked by the board to turn around a <strong>$55M ARR</strong> last-mile digital CX business in fintech. GM of the entire client services unit &mdash; Professional Services, Strategic Consulting, Customer Support, Education. Launched value-added services across <strong>Data &amp; Analytics, Content Strategy, and Interactive Design</strong>, building a profitable services org that touched the full customer lifecycle.</>
+  },
+  {
+    id: 'ibm',
+    startYear: 2023,
+    period: 'Jul 2023 — Present',
+    company: 'IBM Consulting',
+    location: 'San Francisco, CA',
+    title: <>Partner, <span className="it">Customer Transformation, Life Sciences</span></>,
+    tags: ['Life Sciences', 'GenAI / watsonx', 'Adobe Practice', 'CX Transformation', 'C-Suite Advisory'],
+    desc: <>Owning <strong>Customer Experience Transformation</strong> mandates for marquee Life Sciences clients including <strong>Abbott, Illumina, Genentech, AbbVie, and Regeneron</strong>. Grew the Adobe practice at Abbott from <strong>$0 to $20M</strong> over five years. Active GenAI initiatives include the Writer-AI partnership for Abbott&rsquo;s commercial use cases (auto-generated FAQs at scale), Generative Engine Optimization on Abbott&rsquo;s Adobe platform (llms.txt, JSON-LD), and a research-to-territory GenAI engine for Regeneron. Recipient of the <strong>IBM Industry Silver Badge</strong> for industry impact.</>
+  }
+];
+
+function CareerArc() {
+  const [selectedId, setSelectedId] = useState('ibm');
+  const [hoveredId, setHoveredId] = useState(null);
+  const selected = ROLES.find(r => r.id === selectedId);
+
+  const START = 2005, END = 2026;
+  const P0 = { x: 60, y: 160 };
+  const P1 = { x: 500, y: 20 };
+  const P2 = { x: 940, y: 60 };
+  const arcPath = `M ${P0.x},${P0.y} Q ${P1.x},${P1.y} ${P2.x},${P2.y}`;
+
+  const pointAt = (year) => {
+    const t = (year - START) / (END - START);
+    const u = 1 - t;
+    return {
+      x: u*u*P0.x + 2*u*t*P1.x + t*t*P2.x,
+      y: u*u*P0.y + 2*u*t*P1.y + t*t*P2.y
+    };
+  };
+
+  const tickX = (year) => P0.x + ((year - START) / (END - START)) * (P2.x - P0.x);
+  const ticks = [2005, 2010, 2015, 2020, 2026];
+
   return (
-    <div className="role">
-      <div className="role-time">
-        <span className="yr">{year}</span>
-        {period}
+    <div className="arc-wrap">
+      <div className="arc-caption">
+        <span className="arc-caption-note">Click a dot to explore each chapter</span>
       </div>
-      <div className="role-body">
-        <div className="role-title">{title}</div>
-        <div className="role-co">{co}</div>
-        <p className="role-desc">{desc}</p>
-        <div className="role-tags">
-          {tags.map(t => <span key={t} className="role-tag">{t}</span>)}
+
+      <svg viewBox="0 0 1000 240" className="arc-svg" role="img" aria-label="Career arc from 2005 to present">
+        <line x1={P0.x} x2={P2.x} y1="195" y2="195" className="arc-baseline"/>
+        {ticks.map(y => (
+          <g key={y}>
+            <line x1={tickX(y)} x2={tickX(y)} y1="192" y2="198" className="arc-tick"/>
+            <text x={tickX(y)} y="218" textAnchor="middle" className="arc-tick-label">
+              {y === 2026 ? 'TODAY' : y}
+            </text>
+          </g>
+        ))}
+
+        <path d={arcPath} className="arc-line" />
+
+        {ROLES.map(role => {
+          const p = pointAt(role.startYear);
+          const isSelected = role.id === selectedId;
+          const isHovered = role.id === hoveredId;
+          const showLabel = isSelected || isHovered;
+          const cls = `arc-dot-group${isSelected ? ' is-selected' : ''}${isHovered ? ' is-hovered' : ''}`;
+          return (
+            <g
+              key={role.id}
+              className={cls}
+              onClick={() => setSelectedId(role.id)}
+              onMouseEnter={() => setHoveredId(role.id)}
+              onMouseLeave={() => setHoveredId(null)}
+              role="button"
+              tabIndex={0}
+              aria-label={`${role.company}, ${role.period}`}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedId(role.id); } }}
+            >
+              <circle cx={p.x} cy={p.y} r="22" className="arc-dot-hit" />
+              <circle cx={p.x} cy={p.y} r="14" className="arc-dot-halo" />
+              <line x1={p.x} x2={p.x} y1={p.y + 6} y2="193" className="arc-dot-tether" />
+              <circle cx={p.x} cy={p.y} r="5" className="arc-dot" />
+              {showLabel && (
+                <text x={p.x} y={p.y - 16} textAnchor="middle" className="arc-dot-label">
+                  {role.company}
+                </text>
+              )}
+            </g>
+          );
+        })}
+      </svg>
+
+      <div className="arc-detail" key={selectedId}>
+        <div className="arc-detail-meta">
+          <div className="arc-detail-year">{selected.startYear}</div>
+          <div className="arc-detail-period">{selected.period}</div>
+        </div>
+        <div className="arc-detail-body">
+          <h3 className="arc-detail-title">{selected.title}</h3>
+          <div className="arc-detail-co">{selected.company} &mdash; {selected.location}</div>
+          <p className="arc-detail-desc">{selected.desc}</p>
+          <div className="arc-detail-tags">
+            {selected.tags.map(t => <span key={t} className="arc-tag">{t}</span>)}
+          </div>
         </div>
       </div>
     </div>
@@ -705,20 +796,155 @@ const CSS = `
   .industry-list li { font-family: var(--serif); font-size: 24px; color: var(--paper); font-weight: 400; letter-spacing: -0.01em; }
   .industry-list li.it { font-style: italic; font-weight: 300; color: var(--paper-3); }
 
-  /* TIMELINE */
-  .timeline { display: grid; gap: 0; margin-top: 32px; }
-  .role { display: grid; grid-template-columns: 200px 1fr; gap: 56px; padding: 40px 0; border-top: 1px solid var(--rule); align-items: start; }
-  .role:last-child { border-bottom: 1px solid var(--rule); }
-  @media (max-width: 760px) { .role { grid-template-columns: 1fr; gap: 16px; padding: 32px 0; } }
-  .role-time { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); padding-top: 8px; }
-  .role-time .yr { display: block; font-size: 32px; font-family: var(--serif); color: var(--ink); letter-spacing: -0.02em; margin-bottom: 4px; }
-  .role-title { font-family: var(--serif); font-weight: 500; font-size: 28px; line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); }
-  .role-title .it { font-style: italic; font-weight: 300; }
-  .role-co { font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); margin-top: 8px; }
-  .role-desc { font-family: var(--sans); font-size: 16px; line-height: 1.6; color: var(--ink-soft); margin-top: 18px; max-width: 60ch; }
-  .role-desc strong { color: var(--ink); font-weight: 500; }
-  .role-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
-  .role-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); background: var(--paper-2); padding: 5px 10px; border-radius: 4px; }
+/* CAREER ARC */
+.arc-wrap { margin-top: 40px; }
+.arc-caption { text-align: center; margin-bottom: 8px; }
+.arc-caption-note {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.arc-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.arc-line {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  opacity: 0.35;
+}
+
+.arc-baseline { stroke: var(--rule); stroke-width: 1; }
+.arc-tick { stroke: var(--ink-soft); stroke-width: 1; opacity: 0.6; }
+.arc-tick-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  fill: var(--ink-soft);
+}
+
+.arc-dot-group { cursor: pointer; outline: none; }
+.arc-dot-group:focus-visible .arc-dot-halo { opacity: 0.22; }
+.arc-dot-hit { fill: transparent; }
+
+.arc-dot {
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  transition: all .25s ease;
+  r: 5;
+}
+.arc-dot-group:hover .arc-dot,
+.arc-dot-group.is-hovered .arc-dot { r: 6.5; stroke: var(--accent); }
+.arc-dot-group.is-selected .arc-dot { r: 7.5; fill: var(--accent); stroke: var(--accent); }
+
+.arc-dot-halo { fill: var(--accent); opacity: 0; transition: opacity .25s ease; }
+.arc-dot-group:hover .arc-dot-halo,
+.arc-dot-group.is-hovered .arc-dot-halo { opacity: 0.08; }
+.arc-dot-group.is-selected .arc-dot-halo { opacity: 0.14; }
+
+.arc-dot-tether {
+  stroke: var(--ink-soft);
+  stroke-width: 0.8;
+  stroke-dasharray: 2 3;
+  opacity: 0.25;
+  transition: opacity .25s ease;
+}
+.arc-dot-group:hover .arc-dot-tether,
+.arc-dot-group.is-selected .arc-dot-tether { opacity: 0.6; }
+
+.arc-dot-label {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 15px;
+  fill: var(--accent);
+  letter-spacing: -0.01em;
+  pointer-events: none;
+}
+.arc-dot-group.is-hovered:not(.is-selected) .arc-dot-label { fill: var(--ink); }
+
+.arc-detail {
+  margin-top: 36px;
+  padding-top: 36px;
+  border-top: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 56px;
+  align-items: start;
+  animation: arcDetailIn .35s ease;
+}
+@media (max-width: 760px) {
+  .arc-detail { grid-template-columns: 1fr; gap: 20px; padding-top: 28px; margin-top: 28px; }
+}
+@keyframes arcDetailIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.arc-detail-meta { padding-top: 4px; }
+.arc-detail-year {
+  font-family: var(--serif);
+  font-size: 48px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.arc-detail-period {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.arc-detail-title {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0;
+}
+.arc-detail-title .it { font-style: italic; font-weight: 300; }
+.arc-detail-co {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 10px;
+}
+.arc-detail-desc {
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin-top: 20px;
+  max-width: 62ch;
+}
+.arc-detail-desc strong { color: var(--ink); font-weight: 500; }
+.arc-detail-desc em { color: var(--accent); font-style: italic; }
+.arc-detail-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 22px; }
+.arc-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  background: var(--paper-2);
+  padding: 5px 10px;
+  border-radius: 4px;
+}
 
   /* FOR FROG */
   .for-frog { background: var(--paper-2); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); position: relative; overflow: hidden; }
