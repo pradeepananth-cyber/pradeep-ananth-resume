@@ -36,7 +36,7 @@ const CLIENT_LOGOS = [
   { name: 'Regeneron',          slug: null },
   { name: 'Singapore Airlines', slug: 'singaporeairlines' },
   { name: 'Mattel',             slug: 'mattel',            customLogo: 'https://1000logos.net/wp-content/uploads/2020/09/Mattel-Logo.png' },
-  { name: 'Edward Jones', slug: null, customLogo: 'https://1000logos.net/wp-content/uploads/2021/05/Edward-Jones-logo-1536x864.png' }
+  { name: 'Edward Jones', slug: null, customLogo: 'https://1000logos.net/wp-content/uploads/2021/05/Edward-Jones-logo-1536x864.png' },
 
   { name: 'Cisco',              slug: 'cisco' },
   { name: 'Genentech',          slug: null },
