@@ -345,7 +345,6 @@ export default function PradeepResume() {
               <FeatureCard n="04" h="The path."
                 body={<>Three phases. <em>Launch &amp; Empower</em> (automate, train, build trust). <em>Align &amp; Accelerate</em> (custom co-pilots, integrated workflows). <em>Anticipate &amp; Elevate</em> (autonomous networks with human oversight).</>}/>
             </div>
-            <p className="pov-feature-foot">Full working paper, including reference dashboards from a regulated-industry pilot, available on request.</p>
           </div>
         </div>
       </section>
