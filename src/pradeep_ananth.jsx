@@ -174,38 +174,6 @@ export default function PradeepResume() {
         </div>
       </section>
 
-      {/* CLIENT WALL */}
-      <section className="wall" id="clients">
-        <div className="wrap">
-          <div className="section-head">
-            <div><div className="section-num">02 / Track Record</div></div>
-            <h2 className="section-title">Two decades.<br/>Fifty-plus<br/><span className="it">global brands.</span></h2>
-          </div>
-
-          <div className="wall-marquee">
-            <div className="wall-track">
-              {[...MARQUEE, ...MARQUEE].map((name, i) => (
-                <div className="logo-wm" key={i}>{name}</div>
-              ))}
-            </div>
-          </div>
-
-          <div className="industry-grid">
-            <Industry name="Life Sciences & Healthcare"
-              items={['Abbott', 'Illumina', 'Genentech', 'AbbVie', 'Regeneron', 'Cigna']}/>
-            <Industry name="Technology"
-              items={['Microsoft', 'Intel', 'HP', 'Adobe', 'Salesforce', 'Cisco', 'Sony', 'Yahoo']}/>
-            <Industry name="Consumer & Retail"
-              items={['Unilever', 'P&G', 'Adidas', 'Taco Bell', 'Mattel']}/>
-            <Industry name="Financial Services"
-              items={['Visa', 'Ally Bank', 'Experian']}/>
-            <Industry name="Travel & Sports"
-              items={['Singapore Airlines', 'NFL']}/>
-            <Industry name="Media & Entertainment"
-              items={['CBS', 'Sony Pictures']}/>
-          </div>
-        </div>
-      </section>
 
       {/* TIMELINE */}
       <section id="career">
