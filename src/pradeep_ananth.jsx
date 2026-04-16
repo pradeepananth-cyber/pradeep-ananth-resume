@@ -9,7 +9,7 @@ const MARQUEE = [
   'Singapore Airlines','NFL','CBS','Mattel','Taco Bell','Yahoo','Sun Microsystems'
 ];
 
-// 4x6 mosaic for the hero. Each tile tries `customLogo` first
+// 5x6 mosaic for the hero. Each tile tries `customLogo` first
 // (high-quality 1000logos.net source), then falls back to Simple
 // Icons CDN via `slug`, and finally to a styled text wordmark if
 // neither image loads.
@@ -18,31 +18,37 @@ const CLIENT_LOGOS = [
   { name: 'Abbott',             slug: 'abbott' },
   { name: 'Visa',               slug: 'visa' },
   { name: 'Adidas',             slug: 'adidas' },
+  { name: 'Wells Fargo', slug: 'wellsfargo' },
 
   { name: 'Adobe',              slug: 'adobe',             customLogo: 'https://1000logos.net/wp-content/uploads/2021/04/Adobe-logo.png' },
   { name: 'AbbVie',             slug: 'abbvie' },
   { name: 'NFL',                slug: 'nfl' },
   { name: 'Procter & Gamble',   slug: 'procterandgamble',  customLogo: 'https://1000logos.net/wp-content/uploads/2021/03/PG-logo.png' },
+  { name: 'JPMorgan Chase', slug: null, customLogo: 'https://1000logos.net/wp-content/uploads/2020/04/J.P.-Morgan-Chase-Logo.png' },
 
   { name: 'Salesforce',         slug: 'salesforce',        customLogo: 'https://1000logos.net/wp-content/uploads/2017/08/Salesforce-Logo.png' },
   { name: 'Illumina',           slug: 'illumina' },
   { name: 'Sony',               slug: 'sony' },
   { name: 'Unilever',           slug: 'unilever' },
+  { name: 'Fidelity', slug: null, customLogo: 'https://1000logos.net/wp-content/uploads/2017/11/Fidelity-Logo-1536x864.png' },
 
   { name: 'Intel',              slug: 'intel' },
   { name: 'Regeneron',          slug: null },
   { name: 'Singapore Airlines', slug: 'singaporeairlines' },
   { name: 'Mattel',             slug: 'mattel',            customLogo: 'https://1000logos.net/wp-content/uploads/2020/09/Mattel-Logo.png' },
+  { name: 'Edward Jones', slug: null, customLogo: 'https://1000logos.net/wp-content/uploads/2021/05/Edward-Jones-logo-1536x864.png' }
 
   { name: 'Cisco',              slug: 'cisco' },
   { name: 'Genentech',          slug: null },
   { name: 'Ally',               slug: 'ally',              customLogo: 'https://1000logos.net/wp-content/uploads/2021/05/Ally-Financial-logo.png' },
   { name: 'Taco Bell',          slug: 'tacobell' },
+  { name: 'Farmers', slug: null, customLogo: 'https://1000logos.net/wp-content/uploads/2022/06/Farmers-Insurance-Group-logo-1536x864.png' },
 
   { name: 'HP',                 slug: 'hp' },
   { name: 'Cigna',              slug: 'cigna',             customLogo: 'https://1000logos.net/wp-content/uploads/2020/07/Cigna-Logo.png' },
   { name: 'Experian',           slug: 'experian' },
-  { name: 'CBS',                slug: 'cbs' }
+  { name: 'CBS',                slug: 'cbs' },
+  { name: 'Aviva', slug: null, customLogo: 'https://1000logos.net/wp-content/uploads/2021/04/Aviva-logo-1536x864.png' }
 ];
 
 // ============================================================
@@ -552,7 +558,7 @@ const CSS = `
 
   /* HERO */
   .hero { padding: 80px 0 70px; position: relative; }
-  .hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: end; }
+  .hero-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 56px; align-items: end; }
   @media (max-width: 980px) { .hero-grid { grid-template-columns: 1fr; gap: 56px; } }
   .hero-content { position: relative; z-index: 2; }
   .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); display: inline-flex; align-items: center; gap: 10px; margin-bottom: 28px; }
@@ -576,16 +582,17 @@ const CSS = `
   .logo-side-label span { color: var(--accent); font-size: 8px; }
   .logo-mosaic {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
   }
-  @media (max-width: 560px) { .logo-mosaic { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 760px) { .logo-mosaic { grid-template-columns: repeat(4, 1fr); } } 
+  @media (max-width: 520px) { .logo-mosaic { grid-template-columns: repeat(3, 1fr); } }
   .logo-tile {
     background: var(--paper-2);
     border-radius: 10px;
     aspect-ratio: 4 / 3;
     display: flex; align-items: center; justify-content: center;
-    padding: 14px;
+    padding: 10px;
     transition: all .25s ease;
     border: 1px solid transparent;
     overflow: hidden;
@@ -612,7 +619,7 @@ const CSS = `
     font-family: var(--serif);
     font-style: italic;
     font-weight: 400;
-    font-size: clamp(13px, 1.1vw, 18px);
+    font-size: clamp(11px, 0.9vw, 15px);
     color: var(--ink);
     text-align: center;
     line-height: 1.05;
