@@ -315,7 +315,7 @@ export default function PradeepResume() {
           <p className="pov-quote">
             The most liberating thing about LLMs isn&rsquo;t productivity &mdash; it&rsquo;s that you can finally vibe-anything.
           </p>
-          <div className="pov-attr">&mdash; Pradeep (Excerpts from Hihg-engagement Posts on LinkedIN)</div>
+          <div className="pov-feature-title">Excerpts from High-engagement Posts on LinkedIN)</div>
 
           <div className="pov-grid">
             <PovCard h="Vibe-anything."
