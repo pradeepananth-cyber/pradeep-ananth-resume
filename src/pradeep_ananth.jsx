@@ -395,7 +395,7 @@ const ROLES = [
     location: 'Publicis Groupe, San Francisco, CA',
     title: 'Chief Technology Officer',
     tags: ['CTO', 'AWS / Big Data', 'AdTech', 'Product Engineering'],
-    desc: <>Technology leader for Publicis&rsquo; bet on the digital advertising future. Vivaki grew to <strong>200 people and $100M+ in revenue</strong>. Built the data platform that ingested signals from Google, Yahoo, DoubleClick, Bing &mdash; the early-cloud foundation for the agency network&rsquo;s digital practice. Shipped strategic products: <strong>Insights on Demand, Campaigns on Demand, Benchtools, Data Hub.</strong></>
+    desc: <>Technology leader for Publicis&rsquo; bet on the digital advertising future. Vivaki grew to <strong>200 people and $100M+ in revenue</strong>. Built the data platform that ingested signals from Google, Yahoo, DoubleClick, Bing &mdash; the early-cloud foundation for the agency network&rsquo;s digital practice. Shipped strategic products: <strong>Insights on Demand, Campaigns on Demand, Benchtools, Data Hub.</strong>Clients include <strong>Disney, Microsoft, WeightWatchers</strong></>
   },
   {
     id: 'deloitte',
@@ -405,7 +405,7 @@ const ROLES = [
     location: 'San Francisco, CA',
     title: <>Digital Experience &amp; <span className="it">SaaS Practice Lead</span></>,
     tags: ['Big-5 Consulting', 'Adobe / Salesforce', 'SaaS Transformation', 'C-Suite Advisory'],
-    desc: <>Built and grew the West Region digital experience and SaaS Transformation practice. Strategic advisor to C-suite executives across <strong>HP, Intel, Salesforce, Cisco, Ally Bank, Cigna, Experian</strong>. Delivered end-to-end CX solutions on Adobe Experience Cloud, Salesforce Marketing Cloud, and Google Ad Cloud. Led delivery teams of up to 50 onshore + offshore. Operations Lead for the entire community of practice.</>
+    desc: <>Built and grew the West Region digital experience and SaaS Transformation practice. Strategic advisor to C-suite executives across <strong>HP, Intel, Apple, Hitachi, Workday, Salesforce, Cisco, Ally Bank, Cigna, Experian</strong>. Delivered end-to-end CX solutions on Adobe Experience Cloud, Salesforce Marketing Cloud, and Google Ad Cloud. Led delivery teams of up to 50 onshore + offshore. Operations Lead for the entire community of practice.</>
   },
   {
     id: 'celtra',
@@ -415,7 +415,7 @@ const ROLES = [
     location: 'San Francisco, CA',
     title: <>EVP &amp; <span className="it">Chief Customer Officer</span></>,
     tags: ['Customer Success', 'SaaS', 'AdTech'],
-    desc: <>Owned retention and growth of a <strong>~$45M ARR</strong> SaaS platform for building and managing dynamic digital advertising at scale. Re-set customer success motion across enterprise accounts.</>
+    desc: <>Owned retention and growth of a <strong>~$45M ARR</strong> SaaS platform for building and managing dynamic digital advertising at scale. Re-set customer success motion across enterprise accounts.Clients include <strong>Unilever, Procter & Gamble, Reckitt-Benckiser, Adidas, Spotify, Lego</strong></>
   },
   {
     id: 'hearsay',
@@ -425,7 +425,7 @@ const ROLES = [
     location: 'Fintech SaaS, San Francisco, CA',
     title: 'Chief Services Officer',
     tags: ['SaaS Turnaround', 'Financial Services', 'P&L Ownership', 'Org Building'],
-    desc: <>One of seven executives hand-picked by the board to turn around a <strong>$55M ARR</strong> last-mile digital CX business in fintech. GM of the entire client services unit &mdash; Professional Services, Strategic Consulting, Customer Support, Education. Launched value-added services across <strong>Data &amp; Analytics, Content Strategy, and Interactive Design</strong>, building a profitable services org that touched the full customer lifecycle.</>
+    desc: <>One of seven executives hand-picked by the board to turn around a <strong>$55M ARR</strong> last-mile digital CX business in fintech. GM of the entire client services unit &mdash; Professional Services, Strategic Consulting, Customer Support, Education. Launched value-added services across <strong>Data &amp; Analytics, Content Strategy, and Interactive Design</strong>, building a profitable services org that touched the full customer lifecycle.Clients in Financial Services include <strong>Edward Jones, Wells Fargo, JP Morgan Chase, Fidelity, Farmers Insurance, Guardian, New York Life</strong></>
   },
   {
     id: 'ibm',
