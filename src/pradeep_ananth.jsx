@@ -9,23 +9,22 @@ const MARQUEE = [
   'Singapore Airlines','NFL','CBS','Mattel','Taco Bell','Yahoo','Sun Microsystems'
 ];
 
-// 4x6 mosaic for the hero. Slugs map to Simple Icons CDN
-// (https://cdn.simpleicons.org/{slug}). When a slug doesn't exist
-// in the library, the LogoTile component falls back to a styled
-// wordmark — so pharma/biotech brands that aren't on Simple Icons
-// still render cleanly.
+// 4x6 mosaic for the hero. Each tile tries `customLogo` first
+// (high-quality 1000logos.net source), then falls back to Simple
+// Icons CDN via `slug`, and finally to a styled text wordmark if
+// neither image loads.
 const CLIENT_LOGOS = [
-  { name: 'Microsoft',          slug: 'microsoft' },
+  { name: 'Microsoft',          slug: 'microsoft',         customLogo: 'https://1000logos.net/wp-content/uploads/2017/04/Microsoft-Logo.png' },
   { name: 'Abbott',             slug: 'abbott' },
   { name: 'Visa',               slug: 'visa' },
   { name: 'Adidas',             slug: 'adidas' },
 
-  { name: 'Adobe',              slug: 'adobe' },
+  { name: 'Adobe',              slug: 'adobe',             customLogo: 'https://1000logos.net/wp-content/uploads/2021/04/Adobe-logo.png' },
   { name: 'AbbVie',             slug: 'abbvie' },
   { name: 'NFL',                slug: 'nfl' },
-  { name: 'Procter & Gamble',   slug: 'procterandgamble' },
+  { name: 'Procter & Gamble',   slug: 'procterandgamble',  customLogo: 'https://1000logos.net/wp-content/uploads/2021/03/PG-logo.png' },
 
-  { name: 'Salesforce',         slug: 'salesforce' },
+  { name: 'Salesforce',         slug: 'salesforce',        customLogo: 'https://1000logos.net/wp-content/uploads/2017/08/Salesforce-Logo.png' },
   { name: 'Illumina',           slug: 'illumina' },
   { name: 'Sony',               slug: 'sony' },
   { name: 'Unilever',           slug: 'unilever' },
@@ -33,15 +32,15 @@ const CLIENT_LOGOS = [
   { name: 'Intel',              slug: 'intel' },
   { name: 'Regeneron',          slug: null },
   { name: 'Singapore Airlines', slug: 'singaporeairlines' },
-  { name: 'Mattel',             slug: 'mattel' },
+  { name: 'Mattel',             slug: 'mattel',            customLogo: 'https://1000logos.net/wp-content/uploads/2020/09/Mattel-Logo.png' },
 
   { name: 'Cisco',              slug: 'cisco' },
   { name: 'Genentech',          slug: null },
-  { name: 'Ally',               slug: 'ally' },
+  { name: 'Ally',               slug: 'ally',              customLogo: 'https://1000logos.net/wp-content/uploads/2021/05/Ally-Financial-logo.png' },
   { name: 'Taco Bell',          slug: 'tacobell' },
 
   { name: 'HP',                 slug: 'hp' },
-  { name: 'Cigna',              slug: 'cigna' },
+  { name: 'Cigna',              slug: 'cigna',             customLogo: 'https://1000logos.net/wp-content/uploads/2020/07/Cigna-Logo.png' },
   { name: 'Experian',           slug: 'experian' },
   { name: 'CBS',                slug: 'cbs' }
 ];
@@ -104,7 +103,7 @@ export default function PradeepResume() {
               </div>
               <div className="logo-mosaic">
                 {CLIENT_LOGOS.map(c => (
-                  <LogoTile key={c.name} name={c.name} slug={c.slug}/>
+                  <LogoTile key={c.name} name={c.name} slug={c.slug} customLogo={c.customLogo}/>
                 ))}
               </div>
             </div>
@@ -267,7 +266,6 @@ export default function PradeepResume() {
           </div>
         </div>
       </section>
-
       {/* FOR FROG */}
       <section className="for-frog" id="for-frog">
         <div className="wrap">
@@ -509,18 +507,21 @@ function RecItem({ name, detail }) {
   );
 }
 
-function LogoTile({ name, slug }) {
-  // If no slug, or if the SVG fails to load, fall back to a styled wordmark.
-  const [failed, setFailed] = useState(!slug);
+function LogoTile({ name, slug, customLogo }) {
+  // Source priority: customLogo (1000logos.net) → Simple Icons CDN → text wordmark.
+  // Each onError advances to the next source; when all are exhausted, render the wordmark.
+  const sources = [customLogo, slug && `https://cdn.simpleicons.org/${slug}`].filter(Boolean);
+  const [sourceIdx, setSourceIdx] = useState(0);
+  const failed = sourceIdx >= sources.length;
   return (
     <div className="logo-tile" title={name}>
       {failed ? (
         <span className="logo-text">{name}</span>
       ) : (
         <img
-          src={`https://cdn.simpleicons.org/${slug}`}
+          src={sources[sourceIdx]}
           alt={name}
-          onError={() => setFailed(true)}
+          onError={() => setSourceIdx(i => i + 1)}
           loading="lazy"
         />
       )}
